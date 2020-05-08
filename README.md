@@ -33,3 +33,21 @@ java -jar HueEmulator-v0.8.jar
 ```
 
 Throw a sudo infront of that if you want to develop on port 80.
+
+## Basic Development
+Find the IP address of the bridge. If you're using the emulator, it's `localhost:8000`.
+
+To get a username, press the link button on your bridge/emulator then run the following within 30 seconds:
+```
+export HUEUSER=`curl http://localhost:8000/api -d '{"devicetype":"my_hue_app#hue sync"}' -X POST | jq -r '.[0].success.username'`
+```
+
+To check which lights are linked and their status:
+```
+curl http://localhost:8000/api/$HUEUSER/lights
+```
+
+To change the state of light 1 (yes, they're 1-indexed and not 0-indexed):
+```
+curl http://localhost:8000/api/$HUEUSER/lights/1/state -d '{"on":true, "hue":33333}' -X PUT
+```
