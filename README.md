@@ -41,6 +41,7 @@ To get a username, press the link button on your bridge/emulator then run the fo
 ```
 export HUEUSER=`curl http://localhost:8000/api -d '{"devicetype":"my_hue_app#hue sync"}' -X POST | jq -r '.[0].success.username'`
 ```
+You can also use `newdeveloper` as a username for quick development with the emulator, but we will need to be able to generate one for the final project.
 
 To check which lights are linked and their status:
 ```
