@@ -16,7 +16,11 @@ def main():
 
 def connect_to_bridge() -> None:
     try:
-        b = Bridge('localhost')
+        ip = state['gui'].ent_ip['text']
+        if len(ip) is 0:
+            ip = 'localhost'
+
+        b = Bridge(ip)
 
         b.connect()
 
