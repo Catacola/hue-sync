@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Callable
 
 from phue import Bridge, PhueRegistrationException
 import tkinter as tk
@@ -31,6 +31,9 @@ def toggle() -> None:
     cur_state = state['bridge'].get_light(1,'on')
     state['bridge'].set_light(1,{'on': not cur_state})
 
+def handle_hue_click(hue: int) -> Callable[[], None]:
+    return lambda _ : state['bridge'].set_light(1,{'hue': hue})
+
 class GUI(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
@@ -41,6 +44,7 @@ class GUI(tk.Frame):
         self.createTitle()
         self.createLinkUI()
         self.createToggleButton()
+        self.createHueButtons()
         self.createQuitButton()
 
     def createTitle(self) -> None:
@@ -65,6 +69,19 @@ class GUI(tk.Frame):
     def createToggleButton(self) -> None:
         self.btn_test = tk.Button(self, text='toggle', command=toggle)
         self.btn_test.pack()
+
+    def createHueButtons(self) -> None:
+        self.frm_hue = tk.Frame(self)
+        self.frm_hue.pack()
+        self.btn_red = tk.Frame(self.frm_hue, width=40, height=40, bg='red')
+        self.btn_red.bind("<Button-1>", handle_hue_click(0))
+        self.btn_red.pack(side=tk.LEFT)
+        self.btn_green = tk.Frame(self.frm_hue, width=40, height=40, bg='green')
+        self.btn_green.bind("<Button-1>", handle_hue_click(22222))
+        self.btn_green.pack(side=tk.LEFT)
+        self.btn_blue = tk.Frame(self.frm_hue, width=40, height=40, bg='blue')
+        self.btn_blue.bind("<Button-1>", handle_hue_click(44444))
+        self.btn_blue.pack(side=tk.LEFT)
 
     def createQuitButton(self) -> None:
         self.QUIT = tk.Button(self, text="QUIT", fg="red",
