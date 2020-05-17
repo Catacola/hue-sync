@@ -20,6 +20,16 @@ Sync hue lights in multiple locations from a single controller
 
 # Dev Stuff
 
+## Client
+- `python3 client/main.py`
+- Get your brideg ip from `https://discovery.meethue.com`
+
+## Admin
+- Send commands manually to the websocket-based "chatroom" running on AWS
+- Install wscat via `npm install -g wscat`
+- Connect: `wscat -c wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod`
+- Send messages like: `{"message":"sendmessage", "data":"{\"hue\":33333}"}` and watch bulb number 1 change
+
 ## Hue Docs/APIs
 
 - Intro: https://developers.meethue.com/develop/get-started-2/
@@ -36,7 +46,7 @@ java -jar HueEmulator-v0.8.jar
 
 Throw a sudo infront of that if you want to develop on port 80.
 
-## Basic Development
+## Basic API Development
 Find the IP address of the bridge. If you're using the emulator, it's `localhost:8000`.
 
 To get a username, press the link button on your bridge/emulator then run the following within 30 seconds:
