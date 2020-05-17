@@ -1,27 +1,40 @@
 from typing import Optional, Callable
 
+import asyncio
 from phue import Bridge, PhueRegistrationException
+import simplejson as json
+import threading
 import tkinter as tk
 import tkinter.font as tkFont
+import websockets
 
 state = {}
 state['window'] = tk.Tk()
 
 def main():
+    # put websocket on its own thread so the GUI doesn't block it
+    threading.Thread(target=start_ws_client).start()
+    # TODO: cleanup threads when user clicks quit
+    run_gui()
+
+def start_ws_client():
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(ws_client())
+    loop.run_forever()
+
+def run_gui():
     gui = GUI(master=state['window'])
     state['gui'] = gui
     gui.mainloop()
-    #bridge = connect_to_bridge()
-    #bridge.set_light(1, {'hue': 11111})
 
 def connect_to_bridge() -> None:
     try:
         ip = state['gui'].ent_ip.get()
-        print(ip)
         if len(ip) is 0:
             ip = 'localhost'
 
-        print(f'connecting to ${ip}')
+        print(f'connecting to bridge at ${ip}')
         b = Bridge(ip)
 
         b.connect()
@@ -39,6 +52,20 @@ def toggle() -> None:
 
 def handle_hue_click(hue: int) -> Callable[[], None]:
     return lambda _ : state['bridge'].set_light(1,{'hue': hue})
+
+async def ws_client():
+    uri = "wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod"
+    async with websockets.connect(
+        uri, ssl=True
+    ) as websocket:
+        async for message in websocket:
+            await handle_message(message)
+
+async def handle_message(message):
+    print(message)
+    data = json.loads(message)
+    state['bridge'].set_light(1,{'hue': data['hue']})
+
 
 class GUI(tk.Frame):
     def __init__(self, master=None):
@@ -64,6 +91,7 @@ class GUI(tk.Frame):
         self.frm_link.pack()
         self.frm_link_ip = tk.Frame(self.frm_link)
         self.frm_link_ip.pack()
+        # TODO: Get bridge IP from previous session and try to autoconnect
         self.lbl_ip = tk.Label(self.frm_link_ip, text="i.p.")
         self.ent_ip = tk.Entry(self.frm_link_ip)
         self.btn_link = tk.Button(self.frm_link, text='Link to Bridge',
