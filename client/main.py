@@ -13,8 +13,9 @@ state['window'] = tk.Tk()
 
 def main():
     # put websocket on its own thread so the GUI doesn't block it
-    threading.Thread(target=start_ws_client).start()
-    # TODO: cleanup threads when user clicks quit
+    thread = threading.Thread(target=start_ws_client)
+    thread.setDaemon(True) # kill ws listener when gui quits
+    thread.start()
     run_gui()
 
 def start_ws_client():
@@ -34,7 +35,7 @@ def connect_to_bridge() -> None:
         if len(ip) is 0:
             ip = 'localhost'
 
-        print(f'connecting to bridge at ${ip}')
+        print(f'connecting to bridge at {ip}')
         b = Bridge(ip)
 
         b.connect()
@@ -52,6 +53,9 @@ def toggle() -> None:
 
 def handle_hue_click(hue: int) -> Callable[[], None]:
     return lambda _ : state['bridge'].set_light(1,{'hue': hue})
+
+def handle_quit_click():
+    state['window'].destroy()
 
 async def ws_client():
     uri = "wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod"
@@ -119,7 +123,7 @@ class GUI(tk.Frame):
 
     def createQuitButton(self) -> None:
         self.QUIT = tk.Button(self, text="QUIT", fg="red",
-                                            command=state['window'].destroy)
+                                            command=handle_quit_click)
         self.QUIT.pack(side="bottom")
 
 
