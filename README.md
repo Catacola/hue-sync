@@ -6,7 +6,7 @@ Sync hue lights in multiple locations from a single controller
 ## Client
 - Has tutorial to pair with bridge (for now, assume 1 bridge on a network)
 - Can find bridge on network without user inputting IP
-- Listens on a pub/sub system (e.g. MQTT via AWS) or keeps an open connection with a server (e.g. websox)
+- ✅ Listens on a pub/sub system (e.g. MQTT via AWS) or keeps an open connection with a server (e.g. websox)
 - Pushes new light commands (e.g. level, hue, saturation) to all lights on paired bridge
 - Can pause and resume control without disconnecting the app
 - Can control overall/maximum brighness of lights
@@ -22,7 +22,7 @@ Sync hue lights in multiple locations from a single controller
 
 ## Client
 - `python3 client/main.py`
-- Get your brideg ip from `https://discovery.meethue.com`
+- Get your bridge ip from `https://discovery.meethue.com`
 
 ## Admin
 - Send commands manually to the websocket-based "chatroom" running on AWS
