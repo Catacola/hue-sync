@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import Finder from './Finder';
@@ -10,6 +10,14 @@ import './Setup.css'
 function Setup() {
   const [isLinked, setIsLinked] = useState<boolean>(false);
   const [addr, setAddr] = useState<string>('');
+  useEffect(() => {
+    const ip = localStorage.getItem('ip');
+    const username = localStorage.getItem('username');
+    if (ip != null && username != null) {
+      setAddr(ip);
+      setIsLinked(true);
+    }
+  })
 
   return (
     <div className="Setup">
