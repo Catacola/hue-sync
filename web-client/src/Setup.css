@@ -1,0 +1,13 @@
+.Setup {
+  border: 1px solid white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
+  width: 500px;
+}
+
+.Setup > * {
+  margin: 20px;
+}
