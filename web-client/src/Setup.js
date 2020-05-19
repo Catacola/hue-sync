@@ -7,9 +7,12 @@ import Finder from './Finder';
 import Linker from './Linker';
 import './Setup.css'
 
-function Setup() {
-  const [isLinked, setIsLinked] = useState<boolean>(false);
+function Setup(props: {
+  setIsLinked: (boolean) => void,
+}) {
+  const {setIsLinked} = props;
   const [addr, setAddr] = useState<string>('');
+
   useEffect(() => {
     const ip = localStorage.getItem('ip');
     const username = localStorage.getItem('username');
@@ -17,7 +20,7 @@ function Setup() {
       setAddr(ip);
       setIsLinked(true);
     }
-  })
+  }, []);
 
   return (
     <div className="Setup">
@@ -25,9 +28,7 @@ function Setup() {
       {
         addr === ''
           ? <Finder setAddr={setAddr}/>
-          : !isLinked
-          ? <Linker addr={addr} setIsLinked={setIsLinked}/>
-          : <div>Linked!</div>
+          : <Linker addr={addr} setIsLinked={setIsLinked}/>
       }
     </div>
   );

@@ -1,17 +1,26 @@
-import React from 'react';
+// @flow
+
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import './App.css';
 import Button from 'react-bootstrap/Button';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Controller from './Controller';
 import Setup from './Setup.js';
 
 
 function App() {
+  const [isLinked, setIsLinked] = useState<boolean>(false);
   return (
     <div className="App">
       <header>
         <h1>Hue to You Too!</h1>
       </header>
-      <Setup/>
+      {
+        isLinked
+          ? <Controller />
+          : <Setup setIsLinked={setIsLinked}/>
+      }
     </div>
   );
 }
