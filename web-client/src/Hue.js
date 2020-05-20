@@ -45,7 +45,7 @@ export default class Hue {
     address: string,
     user: string,
   ): Promise<number> {
-    const resp = await fetch(`${this.getApiBase(address, user)}/lights`);
+    const resp = await fetch(this.getUri(address, user,'lights'));
     const lights = await resp.json();
     return Object.keys(lights).length;
   }
@@ -56,11 +56,12 @@ export default class Hue {
     n: number,
     data: Object,
   ) {
-    const uri = `${this.getApiBase(address, user)}lights/${n}/state`;
-    const resp = await fetch(uri, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    const resp = await fetch(
+      this.getUri(address, user,`lights/${n}/state`),
+      {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      });
     console.log(await resp.json());
   }
 
@@ -68,7 +69,11 @@ export default class Hue {
     return `hueBridge${address}`;
   }
 
-  static getApiBase(address: string, username: string): string {
-    return `http://${address}/api/${username}/`;
+  static getUri(
+    address: string,
+    username: string,
+    endpoint: string,
+  ): string {
+    return `http://${address}/api/${username}/${endpoint}`;
   }
 }
