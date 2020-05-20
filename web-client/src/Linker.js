@@ -4,37 +4,29 @@ import React, { useState } from 'react';
 
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import Hue from './Hue.js';
 
 function Linker(props: {
-  addr: string,
+  hue: Hue,
   setIsLinked: (boolean) => void,
 }) {
   const [error, setError] = useState<string>('');
-  const {addr, setIsLinked} = props;
+  const {hue, setIsLinked} = props;
+
 
   const linkBridge = async () => {
-    const resp = await fetch(
-      `https://${addr}/api`,
-      {
-        method: 'POST',
-        body: JSON.stringify({"devicetype":"hue_sync#web_client"}),
-      });
+    const status = await hue.link();
 
-    const data = await resp.json();
-
-    if(data.length === 0) {
+    if(status == 'NO_RESPONSE') {
       setError('Bridge not responding');
       return;
     }
 
-    if(data[0].error && data[0].error.type === 101) {
+    if(status == 'PRESS_LINK') {
       setError('Link button not pressed');
       return;
     }
 
-    const {username} = data[0].success;
-    localStorage.setItem('ip', addr);
-    localStorage.setItem('username', username);
     setError('');
     setIsLinked(true);
   }

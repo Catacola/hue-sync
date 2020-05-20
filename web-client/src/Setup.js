@@ -3,32 +3,25 @@
 import React, { useState, useEffect } from 'react';
 
 import Button from 'react-bootstrap/Button';
+import Hue from './Hue.js';
 import Finder from './Finder';
 import Linker from './Linker';
 import './Setup.css'
 
 function Setup(props: {
   setIsLinked: (boolean) => void,
+  hue: Hue,
+  setHue: (Hue) => void,
 }) {
-  const {setIsLinked} = props;
-  const [addr, setAddr] = useState<string>('');
-
-  useEffect(() => {
-    const ip = localStorage.getItem('ip');
-    const username = localStorage.getItem('username');
-    if (ip != null && username != null) {
-      setAddr(ip);
-      setIsLinked(true);
-    }
-  }, []);
+  const {setIsLinked, hue, setHue} = props;
 
   return (
     <div className="Setup">
       <h3>Setup Bridge</h3>
       {
-        addr === ''
-          ? <Finder setAddr={setAddr}/>
-          : <Linker addr={addr} setIsLinked={setIsLinked}/>
+        hue.address === ''
+          ? <Finder hue={hue} setHue={setHue}/>
+          : <Linker hue={hue} setHue={setHue} setIsLinked={setIsLinked}/>
       }
     </div>
   );
