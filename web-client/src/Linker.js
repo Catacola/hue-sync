@@ -7,28 +7,30 @@ import Button from 'react-bootstrap/Button';
 import Hue from './Hue.js';
 
 function Linker(props: {
-  hue: Hue,
+  address: string,
+  setUsername: (string) => void,
   setIsLinked: (boolean) => void,
 }) {
   const [error, setError] = useState<string>('');
-  const {hue, setIsLinked} = props;
+  const {address, setUsername, setIsLinked} = props;
 
 
   const linkBridge = async () => {
-    const status = await hue.link();
+    const resp = await Hue.link(address);
 
-    if(status == 'NO_RESPONSE') {
+    if(resp === 'NO_RESPONSE') {
       setError('Bridge not responding');
       return;
     }
 
-    if(status == 'PRESS_LINK') {
+    if(resp === 'PRESS_LINK') {
       setError('Link button not pressed');
       return;
     }
 
     setError('');
     setIsLinked(true);
+    setUsername(resp);
   }
 
   return (

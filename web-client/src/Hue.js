@@ -1,36 +1,25 @@
 // @flow
-
-class Hue {
-  address: string;
-  username: string;
-
-  constructor(address: string = '', username: string = '') {
-    this.address = address;
-    this.username = username;
-  }
-
-  async discover() {
+export default class Hue {
+  static async discover (): Promise<[?string, ?string]> {
     const resp = await fetch('https://discovery.meethue.com');
 
+    let [address, username] = [null, null];
     const addresses = await resp.json();
 
     if (addresses.length > 0) {
-      this.address = addresses[0].internalipaddress;
-      const hueUser = localStorage.getItem(this.getUserKey());
+      address = addresses[0].internalipaddress;
+      const hueUser = localStorage.getItem(this.getUserKey(address));
       if (hueUser != null) {
-        this.username = hueUser;
+        username = hueUser;
       }
-
     }
+
+    return [address, username];
   }
 
-  async link(): Promise<string> {
-    if (this.address === '') {
-      return 'NO_BRIDGE';
-    }
-
+  static async link (address: string): Promise<string> {
     const resp = await fetch(
-      `https://${this.address}/api`,
+      `http://${address}/api`,
       {
         method: 'POST',
         body: JSON.stringify({'devicetype':'hue_sync#web_client'}),
@@ -47,18 +36,39 @@ class Hue {
     }
 
     const {username} = data[0].success;
-    localStorage.setItem('last_bridge_ip', this.address);
-    localStorage.setItem(this.getUserKey(), username);
-    return 'SUCCESS';
+    localStorage.setItem('last_bridge_ip', address);
+    localStorage.setItem(this.getUserKey(address), username);
+    return username;
   }
 
-  getUserKey(): string {
-    return `hueBridge${this.address}`;
+  static async getNumLights (
+    address: string,
+    user: string,
+  ): Promise<number> {
+    const resp = await fetch(`${this.getApiBase(address, user)}/lights`);
+    const lights = await resp.json();
+    return Object.keys(lights).length;
   }
 
-  clone(): Hue {
-    return new Hue(this.address, this.username);
+  static async setLight(
+    address: string,
+    user: string,
+    n: number,
+    data: Object,
+  ) {
+    const uri = `${this.getApiBase(address, user)}lights/${n}/state`;
+    const resp = await fetch(uri, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+    console.log(await resp.json());
+  }
+
+  static getUserKey(address: string): string {
+    return `hueBridge${address}`;
+  }
+
+  static getApiBase(address: string, username: string): string {
+    return `http://${address}/api/${username}/`;
   }
 }
-
-export default Hue;

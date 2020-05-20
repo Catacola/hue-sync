@@ -6,18 +6,17 @@ import Button from 'react-bootstrap/Button';
 import Hue from './Hue.js';
 
 function Finder(props: {
-  hue: Hue,
-  setHue: (Hue) => void,
+  setAddress: (string) => void,
 }) {
   const [error, setError] = useState<boolean>(false);
 
   const findBridge = async () => {
-    const {hue, setHue} = props;
+    const {setAddress} = props;
 
-    await hue.discover();
+    const [address, _] = await Hue.discover();
 
-    if(hue.address != null) {
-      setHue(hue);
+    if(address != null) {
+      setAddress(address);
     } else {
       setError(true);
     }

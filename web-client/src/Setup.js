@@ -10,18 +10,23 @@ import './Setup.css'
 
 function Setup(props: {
   setIsLinked: (boolean) => void,
-  hue: Hue,
-  setHue: (Hue) => void,
+  address: string,
+  setAddress: (string) => void,
+  setUsername: (string) => void,
 }) {
-  const {setIsLinked, hue, setHue} = props;
+  const {setIsLinked, address, setAddress, setUsername} = props;
 
   return (
     <div className="Setup">
       <h3>Setup Bridge</h3>
       {
-        hue.address === ''
-          ? <Finder hue={hue} setHue={setHue}/>
-          : <Linker hue={hue} setHue={setHue} setIsLinked={setIsLinked}/>
+        address === ''
+          ? <Finder setAddress={setAddress}/>
+          : <Linker
+              address={address}
+              setUsername={setUsername}
+              setIsLinked={setIsLinked}
+            />
       }
     </div>
   );

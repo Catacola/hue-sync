@@ -12,25 +12,24 @@ import Setup from './Setup.js';
 
 function App() {
   const [isLinked, setIsLinked] = useState<boolean>(false);
-  const [hue, setHueRaw] = useState<Hue>(new Hue());
+  const [address, setAddress] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
 
   useEffect(() => {
     async function initializeHue() {
-      const myHue = new Hue();
-      await myHue.discover();
+      const [addr, user] = await Hue.discover();
 
-      if (myHue.address && myHue.username) {
-        setIsLinked(true);
+      if (addr) {
+        setAddress(addr);
+        if (user) {
+          setUsername(user);
+          setIsLinked(true);
+        }
       }
-      setHueRaw(myHue);
     }
 
     initializeHue();
   }, []);
-
-  const setHue = (hue: Hue): void => {
-    setHueRaw(hue.clone());
-  }
 
   return (
     <div className="App">
@@ -39,8 +38,13 @@ function App() {
       </header>
       {
         isLinked
-          ? <Controller />
-          : <Setup setIsLinked={setIsLinked} hue={hue} setHue={setHue}/>
+          ? <Controller address={address} username={username}/>
+          : <Setup
+              setIsLinked={setIsLinked}
+              address={address}
+              setAddress={setAddress}
+              setUsername={setUsername}
+          />
       }
     </div>
   );
