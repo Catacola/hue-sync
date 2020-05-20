@@ -35,7 +35,14 @@ function Linker(props: {
 
   return (
     <>
-      {error !== '' && <Alert variant={'danger'}>{error}</Alert>}
+      {
+        error === ''
+          ? <Alert variant={'secondary'}>
+              Press the link button on your Hue bridge and then click below within 30 seconds
+            </Alert>
+          : <Alert variant={'danger'}>{error}</Alert>
+      }
+
       <Button onClick={linkBridge}>Link to Bridge</Button>
     </>
   );
