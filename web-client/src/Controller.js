@@ -10,7 +10,17 @@ function Controller(props: {
   username: string,
 }) {
   const [lightHue, setLightHue] = useState<number>(0);
+  const [numLights, setNumLights] = useState<number>(0);
   const {address, username} = props;
+
+  useEffect(() => {
+    async function getLightInfo() {
+      const num = await Hue.getNumLights(address, username);
+      setNumLights(num);
+    }
+
+    getLightInfo();
+  });
 
   useEffect(() => {
     const ws = new WebSocket('wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod');
@@ -32,6 +42,7 @@ function Controller(props: {
   return (
     <div>
       <div>Linked!</div>
+      <div>Num lights: {numLights}</div>
       <div>Hue: {lightHue}</div>
       <Button onClick={handleClick}>Foo</Button>
     </div>

@@ -45,8 +45,7 @@ export default class Hue {
     address: string,
     user: string,
   ): Promise<number> {
-    const resp = await fetch(this.getUri(address, user,'lights'));
-    const lights = await resp.json();
+    const lights = await this.makeApiCall(address, user,'lights');
     return Object.keys(lights).length;
   }
 
@@ -55,18 +54,31 @@ export default class Hue {
     user: string,
     n: number,
     data: Object,
-  ) {
-    const resp = await fetch(
-      this.getUri(address, user,`lights/${n}/state`),
+  ): Promise<void> {
+    const resp = await this.makeApiCall(address, user, `lights/${n}/state`,
       {
         method: 'PUT',
         body: JSON.stringify(data),
       });
-    console.log(await resp.json());
+    console.log(resp);
+  }
+
+  static async getCapabilities(address: string, user: string): Promise<Object> {
+    return await this.makeApiCall(address, user, 'capabilities');
   }
 
   static getUserKey(address: string): string {
     return `hueBridge${address}`;
+  }
+
+  static async makeApiCall(
+    address: string,
+    username: string,
+    endpoint: string,
+    options: Object = {},
+  ): Promise<Object> {
+    const resp = await fetch(this.getUri(address, username, endpoint), options);
+    return await resp.json();
   }
 
   static getUri(
