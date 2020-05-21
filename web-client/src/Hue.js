@@ -63,6 +63,19 @@ export default class Hue {
     console.log(resp);
   }
 
+  static async setAllLights(
+    address: string,
+    user: string,
+    data: Object,
+  ): Promise<void> {
+    const resp = await this.makeApiCall(address, user, `groups/0/action`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      });
+    console.log(resp);
+  }
+
   static async getCapabilities(address: string, user: string): Promise<Object> {
     return await this.makeApiCall(address, user, 'capabilities');
   }

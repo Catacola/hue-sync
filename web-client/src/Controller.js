@@ -34,7 +34,7 @@ function Controller(props: {
 
   const handleMessage = async (newHue: number) => {
     setLightHue(newHue);
-    await Hue.setLight(address, username, 1, {hue: newHue, on: true});
+    await Hue.setAllLights(address, username, {hue: newHue, on: true});
   }
 
   const handleClick = () => Hue.getNumLights(address, username);
