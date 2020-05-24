@@ -7,10 +7,10 @@ Sync hue lights in multiple locations from a single controller
 - ✅ Has tutorial to pair with bridge (for now, assume 1 bridge on a network)
 - ✅ Can find bridge on network without user inputting IP
 - ✅ Listens to a websox multiplexer living on AWS for light commands
-- Pushes new light commands (e.g. level, hue, saturation) to all lights on paired bridge
-  - ✅ Pushes to light #1 on bridge
-- Can pause and resume control without disconnecting the app
-- Can control overall/maximum brighness of lights
+- ✅ Pushes new light commands (e.g. level, hue, saturation) to all lights on paired bridge
+- ✅ Can pause and resume control without disconnecting the app
+- User can control overall/maximum brighness of lights
+- App can push along hue, sat, bri, on/off commands
 - Open Q: Should patterns be run locally or treated just like any other command and we just spam them down?
 
 ## Controller
