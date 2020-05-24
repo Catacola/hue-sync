@@ -60,7 +60,6 @@ export default class Hue {
         method: 'PUT',
         body: JSON.stringify(data),
       });
-    console.log(resp);
   }
 
   static async setAllLights(
