@@ -10,7 +10,7 @@ Sync hue lights in multiple locations from a single controller
 - ✅ Pushes new light commands (e.g. level, hue, saturation) to all lights on paired bridge
 - ✅ Can pause and resume control without disconnecting the app
 - User can control overall/maximum brighness of lights
-- App can push along hue, sat, bri, on/off commands
+- ✅ App can push along hue, sat, bri, on/off commands
 - Open Q: Should patterns be run locally or treated just like any other command and we just spam them down?
 
 ## Controller
