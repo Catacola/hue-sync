@@ -58,9 +58,6 @@ function Controller(props: {
     <div className="Controller">
       <div>Good to go!</div>
       <div>Connected to {numLights} lights</div>
-      <div>Hue: {lightHue}</div>
-      <div>Brightness: {lightBrightness}</div>
-      <div>{lightOn ? 'On' : 'Off'}</div>
       <FakeLight hue={lightHue} brightness={lightBrightness} on={lightOn} />
       <Button
         onClick={handleToggleEnabled}
