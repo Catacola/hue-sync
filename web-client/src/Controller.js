@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import Button from 'react-bootstrap/Button';
+import './Controller.css';
+import FakeLight from './FakeLight.js';
 import Hue from './Hue.js';
 
 function Controller(props: {
@@ -53,12 +55,13 @@ function Controller(props: {
   }
 
   return (
-    <div>
-      <div>Linked!</div>
-      <div>Num lights: {numLights}</div>
+    <div className="Controller">
+      <div>Good to go!</div>
+      <div>Connected to {numLights} lights</div>
       <div>Hue: {lightHue}</div>
       <div>Brightness: {lightBrightness}</div>
       <div>{lightOn ? 'On' : 'Off'}</div>
+      <FakeLight hue={lightHue} brightness={lightBrightness} on={lightOn} />
       <Button
         onClick={handleToggleEnabled}
         variant={enabled ? 'success' : 'outline-success'}>

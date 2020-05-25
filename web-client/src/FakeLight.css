@@ -1,0 +1,8 @@
+.FakeLight {
+  --size: 70px;
+  height: var(--size);
+  width: var(--size);
+  border-radius: var(--size);
+  border: 2px solid white;
+  margin: 15px;
+}
