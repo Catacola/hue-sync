@@ -1,24 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
+// @flow
+
+import React, { useRef } from 'react';
+
 import './App.css';
+import ColorPicker from './ColorPicker.js';
+import logo from './logo.svg';
 
 function App() {
+  const ws = useRef<WebSocket>(new WebSocket('wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod'));
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Hue Controller</h1>
       </header>
+      <ColorPicker ws={ws.current} />
     </div>
   );
 }

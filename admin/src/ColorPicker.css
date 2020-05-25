@@ -1,0 +1,14 @@
+.ColorPicker {
+  display: flex;
+  flex-wrap: wrap;
+  width: 500px;
+  justify-content: center;
+}
+
+.ColorItem {
+  --size: 70px;
+  height: var(--size);
+  width: var(--size);
+  border-radius: 15px;
+  margin: 10px;
+}
