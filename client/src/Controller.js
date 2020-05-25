@@ -58,7 +58,7 @@ function Controller(props: {
   return (
     <div className="Controller">
       <div>Good to go!</div>
-      <div>Connected to {numLights} lights</div>
+      <div>Connected to {numLights} light{numLights !== 1 && 's'}</div>
       <FakeLight hue={lightHue} brightness={lightBrightness} on={lightOn} />
       <Form>
         <Form.Switch
