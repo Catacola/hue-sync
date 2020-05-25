@@ -1,14 +1,15 @@
 .ColorPicker {
   display: flex;
   flex-wrap: wrap;
-  width: 500px;
   justify-content: center;
+  width: 500px;
 }
 
 .ColorItem {
   --size: 70px;
-  height: var(--size);
-  width: var(--size);
   border-radius: 15px;
+  height: var(--size);
   margin: 10px;
+  cursor: pointer;
+  width: var(--size);
 }
