@@ -14,8 +14,8 @@ Sync hue lights in multiple locations from a single controller
 - Open Q: Should patterns be run locally or treated just like any other command and we just spam them down?
 
 ## Controller
-- Can push commands to a pub/sub (e.g. MQTT) or a server which will multiplex out to open connections
-- Can select color
+- ✅ Can push commands to a websox multiplexer
+- ✅ Can select color
   - Either from palette or from a colorwheel
 - Can run basic patterns like a rainbow fade, a hue wave, cycle through a palette, etc.
 
