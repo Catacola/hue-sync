@@ -17,7 +17,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "flow": "flow"
+    "flow": "flow",
+    "deploy": " aws s3 sync ./build/ s3://hue-sync --delete"
   },
   "eslintConfig": {
     "extends": "react-app"
