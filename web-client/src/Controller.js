@@ -10,6 +10,8 @@ function Controller(props: {
   username: string,
 }) {
   const [lightHue, setLightHue] = useState<number>(0);
+  const [lightBrightness, setLightBrightness] = useState<number>(0);
+  const [lightOn, setLightOn] = useState<boolean>(true);
   const [numLights, setNumLights] = useState<number>(0);
   const [enabled, setEnabled] = useState(true);
   const {address, username} = props;
@@ -29,19 +31,21 @@ function Controller(props: {
     if (enabled) {
       ws.current.onmessage = async (event: any) => {
         const data = JSON.parse(event.data);
-        await handleMessage(data.hue);
+        await handleMessage(data);
       };
     } else {
       ws.current.onmessage = (() => {});
     }
   }, [enabled]);
 
-  const handleMessage = async (newHue: number) => {
+  const handleMessage = async (newState: Object) => {
     if (!enabled) {
       return;
     }
-    setLightHue(newHue);
-    await Hue.setAllLights(address, username, {hue: newHue, on: true});
+    'hue' in newState && setLightHue(newState.hue);
+    'bri' in newState && setLightBrightness(newState.bri);
+    'on' in newState && setLightOn(newState.on);
+    await Hue.setAllLights(address, username, newState);
   }
 
   const handleToggleEnabled = () => {
@@ -53,6 +57,8 @@ function Controller(props: {
       <div>Linked!</div>
       <div>Num lights: {numLights}</div>
       <div>Hue: {lightHue}</div>
+      <div>Brightness: {lightBrightness}</div>
+      <div>{lightOn ? 'On' : 'Off'}</div>
       <Button
         onClick={handleToggleEnabled}
         variant={enabled ? 'success' : 'outline-success'}>
