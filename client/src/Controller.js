@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import './Controller.css';
 import FakeLight from './FakeLight.js';
 import Hue from './Hue.js';
@@ -59,11 +60,14 @@ function Controller(props: {
       <div>Good to go!</div>
       <div>Connected to {numLights} lights</div>
       <FakeLight hue={lightHue} brightness={lightBrightness} on={lightOn} />
-      <Button
-        onClick={handleToggleEnabled}
-        variant={enabled ? 'success' : 'outline-success'}>
-          {enabled ? 'Enabled' : 'Disabled'}
-      </Button>
+      <Form>
+        <Form.Switch
+          onChange={handleToggleEnabled}
+          id="custom-switch"
+          checked={enabled}
+          label="Enabled"
+        />
+      </Form>
     </div>
   );
 }
