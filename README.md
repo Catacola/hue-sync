@@ -23,16 +23,23 @@ Sync hue lights in multiple locations from a single controller
 
 ## Client
 - Ditched the python client. Going full browser.
-- `cd web_client/`
+- `cd client/`
 - `yarn install`
 - `yarn start`
 - Open `http://localhost:3000` if yarn doesn't do it for you
 
-## Admin
+## Controller
+- `cd admin/`
+- `yarn install`
+- `yarn start`
+- Open `http://localhost:3001` if yarn doesn't do it for you
+
+## Manual Controller
 - Send commands manually to the websocket-based "chatroom" running on AWS
 - Install wscat via `npm install -g wscat`
 - Connect: `wscat -c wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod`
-- Send messages like: `{"message":"sendmessage", "data":"{\"hue\":33333}"}` and watch bulb number 1 change
+- Send messages like: `{"message":"sendmessage", "data":"{\"hue\":33333}"}`
+- Useful for testing new client capabilities before controller development
 
 ## Hue Docs/APIs
 
