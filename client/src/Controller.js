@@ -14,23 +14,25 @@ function Controller(props: {
   username: string,
 }) {
   const [lightHue, setLightHue] = useState<number>(0);
-  const [lightBrightness, setLightBrightness] = useState<number>(255);
+  const [lightBrightness, setLightBrightness] = useState<number>(0);
   const [lightOn, setLightOn] = useState<boolean>(true);
   const [numLights, setNumLights] = useState<number>(0);
   const [patternID, setPatternID] = useState<?IntervalID>(null);
   const [enabled, setEnabled] = useState(true);
   const {address, username} = props;
 
-  const ws = useRef<WebSocket>(new WebSocket(ws_address));
+  const ws = useRef<?WebSocket>();
 
   const handlePattern = useCallback(async (args: Object): Promise<void> => {
     switch(args.pattern) {
       case 'step':
         const {interval, colors} = args;
+        setLightBrightness(255);
         let c = 0;
         const id = setInterval(() => {
           Hue.setAllLights(address, username, {
             hue: colors[c],
+            bri: 255,
             transitiontime: 2,
           });
           setLightHue(colors[c]);
@@ -69,9 +71,12 @@ function Controller(props: {
 
   useEffect(() => {
     const id = setInterval(() => {
-      if (ws.current.readyState === 2 || ws.current.readyState === 3) {
+      if (ws.current == null
+        || ws.current.readyState === 2
+        || ws.current.readyState === 3) {
         ws.current = new WebSocket(ws_address);
         ws.current.onmessage = handleMessage;
+        console.log('New Websocket!');
       }
     }, 2000);
 
@@ -89,7 +94,9 @@ function Controller(props: {
   }, [address, username]);
 
   useEffect(() => {
-    ws.current.onmessage = enabled ? handleMessage : () => {};
+    if( ws.current != null ) {
+      ws.current.onmessage = enabled ? handleMessage : () => {};
+    }
   }, [enabled, handleMessage]);
 
 
