@@ -20,7 +20,7 @@ function Finder(props: {
     } else {
       setError(true);
     }
-  }
+  };
 
   return(
     <Button onClick={findBridge}>Find Bridge</Button>

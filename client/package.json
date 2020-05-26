@@ -21,7 +21,10 @@
     "deploy": " aws s3 sync ./build/ s3://hue-sync --delete"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "semi": ["error", "always"]
+    }
   },
   "browserslist": {
     "production": [

@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Hue from './Hue.js';
 import Finder from './Finder';
 import Linker from './Linker';
-import './Setup.css'
+import './Setup.css';
 
 function Setup(props: {
   setIsLinked: (boolean) => void,

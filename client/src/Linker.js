@@ -31,7 +31,7 @@ function Linker(props: {
     setError('');
     setIsLinked(true);
     setUsername(resp);
-  }
+  };
 
   return (
     <>
