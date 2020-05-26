@@ -21,12 +21,28 @@ function App() {
     return () => clearInterval(id);
   }, [ws]);
 
+  const handleColorClick = async (hue) => {
+    const msg = JSON.stringify({
+      message: "sendmessage",
+      data: JSON.stringify({
+        type: "light",
+        args: {
+          on: true,
+          hue: hue*182,
+          bri: 255,
+          transitiontime: 2,
+        },
+      })
+    });
+    ws.send(msg);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Hue Controller</h1>
       </header>
-      <ColorPicker ws={ws} />
+      <ColorPicker handleColorClick={handleColorClick} />
     </div>
   );
 }
