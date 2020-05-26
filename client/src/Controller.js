@@ -1,12 +1,14 @@
 // @flow
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './Controller.css';
 import FakeLight from './FakeLight.js';
 import Hue from './Hue.js';
+
+const ws_address = 'wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod';
 
 function Controller(props: {
   address: string,
@@ -19,7 +21,29 @@ function Controller(props: {
   const [enabled, setEnabled] = useState(true);
   const {address, username} = props;
 
-  const ws = useRef<WebSocket>(new WebSocket('wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod'));
+  const ws = useRef<WebSocket>(new WebSocket(ws_address));
+
+  const handleMessage = useCallback(async (event: any) => {
+    const newState = JSON.parse(event.data);
+
+    'hue' in newState && setLightHue(newState.hue);
+    'bri' in newState && setLightBrightness(newState.bri);
+    'on' in newState && setLightOn(newState.on);
+
+    await Hue.setAllLights(address, username, newState);
+  }, [address, username]);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (ws.current.readyState === 2 || ws.current.readyState === 3) {
+        ws.current = new WebSocket(ws_address);
+        ws.current.onmessage = handleMessage;
+      }
+    }, 2000);
+
+    return () => clearInterval(id);
+  }, [handleMessage]);
+
 
   useEffect(() => {
     async function getLightInfo() {
@@ -28,28 +52,12 @@ function Controller(props: {
     }
 
     getLightInfo();
-  }, []);
+  }, [address, username]);
 
   useEffect(() => {
-    if (enabled) {
-      ws.current.onmessage = async (event: any) => {
-        const data = JSON.parse(event.data);
-        await handleMessage(data);
-      };
-    } else {
-      ws.current.onmessage = (() => {});
-    }
-  }, [enabled]);
+    ws.current.onmessage = enabled ? handleMessage : () => {};
+  }, [enabled, handleMessage]);
 
-  const handleMessage = async (newState: Object) => {
-    if (!enabled) {
-      return;
-    }
-    'hue' in newState && setLightHue(newState.hue);
-    'bri' in newState && setLightBrightness(newState.bri);
-    'on' in newState && setLightOn(newState.on);
-    await Hue.setAllLights(address, username, newState);
-  }
 
   const handleToggleEnabled = () => {
     setEnabled(!enabled);
