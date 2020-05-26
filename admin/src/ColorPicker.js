@@ -8,7 +8,6 @@ function ColorPicker(props: {
   ws: WebSocket,
 }) {
 
-
   const makeColorButton = (hue: number): React.Element<'div'> => {
     const handleColorClick = () => {
       const msg = JSON.stringify({
