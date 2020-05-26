@@ -24,13 +24,21 @@ function Controller(props: {
   const ws = useRef<WebSocket>(new WebSocket(ws_address));
 
   const handleMessage = useCallback(async (event: any) => {
-    const newState = JSON.parse(event.data);
+    const data = JSON.parse(event.data);
 
-    'hue' in newState && setLightHue(newState.hue);
-    'bri' in newState && setLightBrightness(newState.bri);
-    'on' in newState && setLightOn(newState.on);
+    switch(data.type) {
+      case 'light':
+        const newState = data.args;
+        'hue' in newState && setLightHue(newState.hue);
+        'bri' in newState && setLightBrightness(newState.bri);
+        'on' in newState && setLightOn(newState.on);
 
-    await Hue.setAllLights(address, username, newState);
+        await Hue.setAllLights(address, username, newState);
+        break;
+      default:
+        console.log('Unknown message type: ', data);
+    }
+
   }, [address, username]);
 
   useEffect(() => {
