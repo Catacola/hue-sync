@@ -16,6 +16,7 @@ function ColorPicker(props: {
           on: true,
           hue: hue*182,
           bri: 255,
+          transitiontime: 2,
         })
       });
       console.log(msg);
