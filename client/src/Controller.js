@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './Controller.css';
 import FakeLight from './FakeLight.js';
@@ -15,13 +14,37 @@ function Controller(props: {
   username: string,
 }) {
   const [lightHue, setLightHue] = useState<number>(0);
-  const [lightBrightness, setLightBrightness] = useState<number>(0);
+  const [lightBrightness, setLightBrightness] = useState<number>(255);
   const [lightOn, setLightOn] = useState<boolean>(true);
   const [numLights, setNumLights] = useState<number>(0);
+  const [patternID, setPatternID] = useState<?IntervalID>(null);
   const [enabled, setEnabled] = useState(true);
   const {address, username} = props;
 
   const ws = useRef<WebSocket>(new WebSocket(ws_address));
+
+  const handlePattern = useCallback(async (args: Object): Promise<void> => {
+    switch(args.pattern) {
+      case 'step':
+        const {interval, colors} = args;
+        let c = 0;
+        const id = setInterval(() => {
+          Hue.setAllLights(address, username, {
+            hue: colors[c],
+            transitiontime: 2,
+          });
+          setLightHue(colors[c]);
+          console.log('hue', colors[c]);
+          c++;
+          c %= colors.length;
+        }, interval);
+        setPatternID(id);
+        break;
+      default:
+        console.log('Unknown pattern:', args);
+
+    }
+  }, [address, username]);
 
   const handleMessage = useCallback(async (event: any) => {
     const data = JSON.parse(event.data);
@@ -35,11 +58,14 @@ function Controller(props: {
 
         await Hue.setAllLights(address, username, newState);
         break;
+      case 'pattern':
+        handlePattern(data.args);
+        break;
       default:
         console.log('Unknown message type: ', data);
     }
 
-  }, [address, username]);
+  }, [address, handlePattern, username]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -69,7 +95,7 @@ function Controller(props: {
 
   const handleToggleEnabled = () => {
     setEnabled(!enabled);
-  }
+  };
 
   return (
     <div className="Controller">
