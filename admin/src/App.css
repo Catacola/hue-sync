@@ -16,3 +16,17 @@
   margin: 30px;
 }
 
+.App .nav-tabs {
+  width: 100%;
+  justify-content: center;
+}
+
+.App .nav-tabs .nav-link {
+  border-color: #FFF;
+}
+
+.App .nav-tabs .nav-link.active {
+  background-color: #333;
+  color: #FFF;
+}
+

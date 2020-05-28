@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from 'react';
 
 import './App.css';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 import ColorPicker from './ColorPicker.js';
-import logo from './logo.svg';
 
 const ws_address = 'wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod';
 
@@ -42,7 +43,14 @@ function App() {
       <header className="App-header">
         <h1>Hue Controller</h1>
       </header>
-      <ColorPicker handleColorClick={handleColorClick} />
+      <Tabs defaultActiveKey="picker">
+        <Tab eventKey="picker" title="Color Picker">
+          <ColorPicker handleColorClick={handleColorClick} />
+        </Tab>
+        <Tab eventKey="pattern" title="Pattern Maker">
+          <div>Make a pattern~</div>
+        </Tab>
+      </Tabs>
     </div>
   );
 }
