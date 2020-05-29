@@ -6,6 +6,7 @@ import './App.css';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import ColorPicker from './ColorPicker.js';
+import PatternMaker from './PatternMaker.js';
 
 const ws_address = 'wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod';
 
@@ -48,7 +49,7 @@ function App() {
           <ColorPicker handleColorClick={handleColorClick} />
         </Tab>
         <Tab eventKey="pattern" title="Pattern Maker">
-          <div>Make a pattern~</div>
+          <PatternMaker handleSendPattern={async () => {}} />
         </Tab>
       </Tabs>
     </div>

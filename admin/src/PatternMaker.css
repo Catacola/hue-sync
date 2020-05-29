@@ -1,0 +1,11 @@
+.NewPattern {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+hr.hrFade {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, #222222FF, #FFFFFF77, #222222FF);
+}
