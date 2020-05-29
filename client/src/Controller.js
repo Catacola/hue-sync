@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import './Controller.css';
 import FakeLight from './FakeLight.js';
+import { useInterval } from './hooks.js';
 import Hue from './Hue.js';
 
 const ws_address = 'wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod';
@@ -17,7 +18,7 @@ function Controller(props: {
   const [lightBrightness, setLightBrightness] = useState<number>(0);
   const [lightOn, setLightOn] = useState<boolean>(true);
   const [numLights, setNumLights] = useState<number>(0);
-  const [patternID, setPatternID] = useState<?IntervalID>(null);
+  const setPatternID = useInterval(null);
   const [enabled, setEnabled] = useState(true);
   const {address, username} = props;
 
@@ -46,9 +47,11 @@ function Controller(props: {
         console.log('Unknown pattern:', args);
 
     }
-  }, [address, username]);
+  }, [address, username, setPatternID]);
 
   const handleMessage = useCallback(async (event: any) => {
+    setPatternID(null);
+
     const data = JSON.parse(event.data);
 
     switch(data.type) {
@@ -67,7 +70,7 @@ function Controller(props: {
         console.log('Unknown message type: ', data);
     }
 
-  }, [address, handlePattern, username]);
+  }, [address, handlePattern, username, setPatternID]);
 
   useEffect(() => {
     const id = setInterval(() => {
