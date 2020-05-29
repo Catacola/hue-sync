@@ -18,7 +18,7 @@ function Controller(props: {
   const [lightBrightness, setLightBrightness] = useState<number>(0);
   const [lightOn, setLightOn] = useState<boolean>(true);
   const [numLights, setNumLights] = useState<number>(0);
-  const setPatternID = useInterval(null);
+  const setPatternInterval = useInterval(null);
   const [enabled, setEnabled] = useState(true);
   const {address, username} = props;
 
@@ -41,16 +41,16 @@ function Controller(props: {
           c++;
           c %= colors.length;
         }, interval);
-        setPatternID(id);
+        setPatternInterval(id);
         break;
       default:
         console.log('Unknown pattern:', args);
 
     }
-  }, [address, username, setPatternID]);
+  }, [address, username, setPatternInterval]);
 
   const handleMessage = useCallback(async (event: any) => {
-    setPatternID(null);
+    setPatternInterval(null);
 
     const data = JSON.parse(event.data);
 
@@ -70,7 +70,7 @@ function Controller(props: {
         console.log('Unknown message type: ', data);
     }
 
-  }, [address, handlePattern, username, setPatternID]);
+  }, [address, handlePattern, username, setPatternInterval]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -78,13 +78,15 @@ function Controller(props: {
         || ws.current.readyState === 2
         || ws.current.readyState === 3) {
         ws.current = new WebSocket(ws_address);
-        ws.current.onmessage = handleMessage;
+        if(enabled) {
+          ws.current.onmessage = handleMessage;
+        }
         console.log('New Websocket!');
       }
     }, 2000);
 
     return () => clearInterval(id);
-  }, [handleMessage]);
+  }, [handleMessage, enabled]);
 
 
   useEffect(() => {
@@ -104,6 +106,7 @@ function Controller(props: {
 
 
   const handleToggleEnabled = () => {
+    enabled && setPatternInterval(null);
     setEnabled(!enabled);
   };
 
