@@ -1,0 +1,23 @@
+.ColorItem {
+  --size: 70px;
+  border-radius: 15px;
+  height: var(--size);
+  margin: 10px;
+  cursor: pointer;
+  width: var(--size);
+  animation: createBox .5s;
+  animation-timing-function: cubic-bezier(0, 0, 0.61, 1.49);
+}
+
+.ColorItem.empty {
+  border: 2px dashed white;
+}
+
+@keyframes createBox {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}

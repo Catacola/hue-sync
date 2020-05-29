@@ -4,12 +4,3 @@
   justify-content: center;
   width: 500px;
 }
-
-.ColorItem {
-  --size: 70px;
-  border-radius: 15px;
-  height: var(--size);
-  margin: 10px;
-  cursor: pointer;
-  width: var(--size);
-}

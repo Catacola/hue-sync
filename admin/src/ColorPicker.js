@@ -3,19 +3,15 @@
 import * as React from 'react';
 
 import './ColorPicker.css';
+import ColorItem from './ColorItem.js';
 
 function ColorPicker(props: {
   handleColorClick: (number) => Promise<void>,
 }) {
 
-  const makeColorButton = (hue: number): React.Element<'div'> => {
+  const makeColorButton = (hue: number) => {
     return (
-      <div
-        className="ColorItem"
-        style={{backgroundColor: `hsl(${hue}, 100%, 50%)`}}
-        onClick={() => props.handleColorClick(hue)}
-        key={hue}
-      />
+      <ColorItem hue={hue} handleClick={props.handleColorClick} key={hue}/>
     );
   }
 
