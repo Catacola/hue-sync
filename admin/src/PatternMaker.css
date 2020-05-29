@@ -9,3 +9,24 @@ hr.hrFade {
     height: 1px;
     background-image: linear-gradient(to right, #222222FF, #FFFFFF77, #222222FF);
 }
+
+.NewPatternControls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.NewPatternControls.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.NewPatternControls > * > * {
+  margin: 10px;
+}
+
+.Interval {
+  width: 180px !important;
+}

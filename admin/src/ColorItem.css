@@ -11,6 +11,7 @@
 
 .ColorItem.empty {
   border: 2px dashed white;
+  animation: none;
 }
 
 @keyframes createBox {

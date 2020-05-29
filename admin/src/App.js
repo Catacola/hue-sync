@@ -23,7 +23,7 @@ function App() {
     return () => clearInterval(id);
   }, [ws]);
 
-  const handleColorClick = async (hue) => {
+  const handleColorClick = (hue) => {
     const msg = JSON.stringify({
       message: "sendmessage",
       data: JSON.stringify({
@@ -39,6 +39,21 @@ function App() {
     ws.send(msg);
   };
 
+  const handleSendPattern = (hues: number[], interval: number) => {
+    const msg = JSON.stringify({
+      message: "sendmessage",
+      data: JSON.stringify({
+        type: "pattern",
+        args: {
+          pattern: "step",
+          colors: hues.map(h => h*182),
+          interval: interval,
+        },
+      })
+    });
+    ws.send(msg);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -49,7 +64,7 @@ function App() {
           <ColorPicker handleColorClick={handleColorClick} />
         </Tab>
         <Tab eventKey="pattern" title="Pattern Maker">
-          <PatternMaker handleSendPattern={async () => {}} />
+          <PatternMaker handleSendPattern={handleSendPattern} />
         </Tab>
       </Tabs>
     </div>

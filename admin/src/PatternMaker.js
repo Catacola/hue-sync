@@ -2,14 +2,18 @@
 
 import React, { useState } from 'react';
 
-import  ColorPicker  from './ColorPicker.js';
-import  ColorItem, { EmptyColorItem }  from './ColorItem.js';
+import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import ColorPicker  from './ColorPicker.js';
+import ColorItem, { EmptyColorItem }  from './ColorItem.js';
 import './PatternMaker.css';
 
 function PatternMaker(props: {
-  handleSendPattern: () => Promise<void>,
+  handleSendPattern: (number[], number) => ?Promise<void>,
 }) {
   const [curPattern, setCurPattern] = useState<number[]>([]);
+  const [patternInterval, setPatternInterval] = useState<number>(2);
 
   const renderPattern = () => {
     const pattern = [];
@@ -22,7 +26,62 @@ function PatternMaker(props: {
         pattern.push(<EmptyColorItem key={i}/>);
       }
     }
-    return pattern;
+    return (
+      <div className="NewPattern">
+        {pattern}
+      </div>
+    );
+  };
+
+  const handleClear = () => setCurPattern([]);
+
+  const handleSend = async () => {
+    await props.handleSendPattern(curPattern, Math.floor(patternInterval * 1000));
+  }
+
+  const handleIntervalChange = (event) => {
+    if (event.target.value.length === 0) {
+      setPatternInterval(2);
+    } else {
+      setPatternInterval(event.target.value);
+    }
+  }
+
+  const isIntervalValid = () => patternInterval >= 0.3;
+
+  const canSubmit = () => curPattern.length > 1 && isIntervalValid();
+
+  const renderControls = () => {
+
+    return (
+      <div className="NewPatternControls">
+        <div className="row">
+          <Button onClick={handleClear} >
+            Clear Pattern
+          </Button>
+          <Button onClick={handleSend} disabled={!canSubmit()}>
+            Send Pattern
+          </Button>
+        </div>
+        <div className="row">
+          <InputGroup className="Interval">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Interval</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              placeholder="2"
+              aria-label="Interval"
+              aria-describedby="basic-addon1"
+              onChange={handleIntervalChange}
+              isInvalid={!isIntervalValid()}
+            />
+            <InputGroup.Append>
+              <InputGroup.Text>sec</InputGroup.Text>
+            </InputGroup.Append>
+          </InputGroup>
+        </div>
+      </div>
+    );
   };
 
   const handleColorClick = (hue) => {
@@ -34,9 +93,8 @@ function PatternMaker(props: {
 
   return (
     <div className="PatternMaker">
-      <div className="NewPattern">
-        {renderPattern()}
-      </div>
+      {renderPattern()}
+      {renderControls()}
       <hr className="hrFade"/>
       <ColorPicker handleColorClick={handleColorClick} />
     </div>
