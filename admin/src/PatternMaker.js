@@ -10,10 +10,11 @@ import ColorItem, { EmptyColorItem }  from './ColorItem.js';
 import './PatternMaker.css';
 
 function PatternMaker(props: {
-  handleSendPattern: (number[], number) => ?Promise<void>,
+  handleSendPattern: (number[], number, number) => ?Promise<void>,
 }) {
   const [curPattern, setCurPattern] = useState<number[]>([]);
   const [patternInterval, setPatternInterval] = useState<number>(2);
+  const [fadetime, setFadetime] = useState<number>(0.2);
 
   const renderPattern = () => {
     const pattern = [];
@@ -36,7 +37,11 @@ function PatternMaker(props: {
   const handleClear = () => setCurPattern([]);
 
   const handleSend = async () => {
-    await props.handleSendPattern(curPattern, Math.floor(patternInterval * 1000));
+    await props.handleSendPattern(
+      curPattern,
+      Math.floor(patternInterval * 1000),
+      Math.floor(fadetime * 10),
+    );
   }
 
   const handleIntervalChange = (event) => {
@@ -47,12 +52,21 @@ function PatternMaker(props: {
     }
   }
 
+  const handleFadeChange = (event) => {
+    if (event.target.value.length === 0) {
+      setFadetime(0.2);
+    } else {
+      setFadetime(event.target.value);
+    }
+  }
+
   const isIntervalValid = () => patternInterval >= 0.3;
 
-  const canSubmit = () => curPattern.length > 1 && isIntervalValid();
+  const isFadeValid = () => fadetime >= 0.1;
+
+  const canSubmit = () => curPattern.length > 1 && isIntervalValid() && isFadeValid();
 
   const renderControls = () => {
-
     return (
       <div className="NewPatternControls">
         <div className="row">
@@ -74,6 +88,21 @@ function PatternMaker(props: {
               aria-describedby="basic-addon1"
               onChange={handleIntervalChange}
               isInvalid={!isIntervalValid()}
+            />
+            <InputGroup.Append>
+              <InputGroup.Text>sec</InputGroup.Text>
+            </InputGroup.Append>
+          </InputGroup>
+          <InputGroup className="Interval">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Fade</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              placeholder="0.2"
+              aria-label="Fade"
+              aria-describedby="basic-addon1"
+              onChange={handleFadeChange}
+              isInvalid={!isFadeValid()}
             />
             <InputGroup.Append>
               <InputGroup.Text>sec</InputGroup.Text>

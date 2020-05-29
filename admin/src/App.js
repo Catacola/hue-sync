@@ -39,7 +39,11 @@ function App() {
     ws.send(msg);
   };
 
-  const handleSendPattern = (hues: number[], interval: number) => {
+  const handleSendPattern = (
+    hues: number[],
+    interval: number,
+    transitiontime: number,
+  ) => {
     const msg = JSON.stringify({
       message: "sendmessage",
       data: JSON.stringify({
@@ -47,7 +51,8 @@ function App() {
         args: {
           pattern: "step",
           colors: hues.map(h => h*182),
-          interval: interval,
+          interval,
+          transitiontime,
         },
       })
     });
