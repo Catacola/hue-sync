@@ -6,7 +6,7 @@ import './ColorItem.css';
 
 function ColorItem(props: {
   hue: number,
-  handleClick: (number) => Promise<void>,
+  handleClick: (number) => ?Promise<void>,
 }) {
   const {hue, handleClick} = props;
 

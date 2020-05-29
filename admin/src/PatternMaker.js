@@ -9,7 +9,7 @@ import './PatternMaker.css';
 function PatternMaker(props: {
   handleSendPattern: () => Promise<void>,
 }) {
-  const [curPattern, setCurPattern] = useState<Array<number>>([]);
+  const [curPattern, setCurPattern] = useState<number[]>([]);
 
   const renderPattern = () => {
     const pattern = [];

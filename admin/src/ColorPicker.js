@@ -6,7 +6,7 @@ import './ColorPicker.css';
 import ColorItem from './ColorItem.js';
 
 function ColorPicker(props: {
-  handleColorClick: (number) => Promise<void>,
+  handleColorClick: (number) => ?Promise<void>,
 }) {
 
   const makeColorButton = (hue: number) => {
