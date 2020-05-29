@@ -12,12 +12,14 @@ Sync hue lights in multiple locations from a single controller
 - User can control overall/maximum brighness of lights
 - ✅ App can push along hue, sat, bri, on/off commands
 - Open Q: Should patterns be run locally or treated just like any other command and we just spam them down?
+  - Answer: run locally
 
 ## Controller
 - ✅ Can push commands to a websox multiplexer
 - ✅ Can select color
   - Either from palette or from a colorwheel
 - Can run basic patterns like a rainbow fade, a hue wave, cycle through a palette, etc.
+  - ✅ Can build a generic step/fade pattern with up to 6 colors
 
 # Dev Stuff
 
