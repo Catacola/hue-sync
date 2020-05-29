@@ -6,15 +6,22 @@ import './ColorItem.css';
 
 function ColorItem(props: {
   hue: number,
-  handleClick: (number) => ?Promise<void>,
+  handleClick?: (number) => ?Promise<void>,
 }) {
   const {hue, handleClick} = props;
+
+  let style;
+  if (handleClick) {
+    style = {backgroundColor: `hsl(${hue}, 100%, 50%)`, cursor: 'pointer'};
+  } else {
+    style = {backgroundColor: `hsl(${hue}, 100%, 50%)`};
+  }
 
   return (
     <div
       className="ColorItem"
-      style={{backgroundColor: `hsl(${hue}, 100%, 50%)`}}
-      onClick={() => handleClick(hue)}
+      style={style}
+      onClick={handleClick ? () => handleClick(hue) : null}
       key={hue}
     />
   );

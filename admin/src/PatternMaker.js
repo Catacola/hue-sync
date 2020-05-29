@@ -21,7 +21,7 @@ function PatternMaker(props: {
     for (let i = 0; i < 6; i++) {
       if (i < curPattern.length) {
         pattern.push(
-          <ColorItem hue={curPattern[i]} handleClick={async (h) => {}} />
+          <ColorItem hue={curPattern[i]} key={i} />
         );
       } else {
         pattern.push(<EmptyColorItem key={i}/>);
