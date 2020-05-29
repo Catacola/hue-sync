@@ -27,14 +27,14 @@ function Controller(props: {
   const handlePattern = useCallback(async (args: Object): Promise<void> => {
     switch(args.pattern) {
       case 'step':
-        const {interval, colors} = args;
+        const {interval, colors, transitiontime} = args;
         setLightBrightness(255);
         let c = 0;
         const id = setInterval(() => {
           Hue.setAllLights(address, username, {
             hue: colors[c],
             bri: 255,
-            transitiontime: 2,
+            transitiontime,
           });
           setLightHue(colors[c]);
           console.log('hue', colors[c]);
