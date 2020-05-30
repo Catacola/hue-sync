@@ -34,7 +34,7 @@ function Controller(props: {
         const id = setInterval(() => {
           Hue.setAllLights(address, username, {
             hue: colors[c],
-            bri: 255,
+            bri: Math.floor(255 * globalBrightness / 100),
             transitiontime,
           });
           setLightHue(colors[c]);
@@ -48,7 +48,7 @@ function Controller(props: {
         console.log('Unknown pattern:', args);
 
     }
-  }, [address, username, setPatternInterval]);
+  }, [address, username, setPatternInterval, globalBrightness]);
 
   const handleMessage = useCallback(async (event: any) => {
     setPatternInterval(null);
@@ -59,8 +59,12 @@ function Controller(props: {
       case 'light':
         const newState = data.args;
         'hue' in newState && setLightHue(newState.hue);
-        'bri' in newState && setLightBrightness(newState.bri);
         'on' in newState && setLightOn(newState.on);
+
+        if('bri' in newState) {
+          setLightBrightness(newState.bri);
+          newState.bri = Math.floor(255 * globalBrightness / 100);
+        }
 
         await Hue.setAllLights(address, username, newState);
         break;
@@ -71,7 +75,7 @@ function Controller(props: {
         console.log('Unknown message type: ', data);
     }
 
-  }, [address, handlePattern, username, setPatternInterval]);
+  }, [address, handlePattern, username, setPatternInterval, globalBrightness]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -129,7 +133,7 @@ function Controller(props: {
       <div>Connected to {numLights} light{numLights !== 1 && 's'}</div>
       <FakeLight hue={lightHue} brightness={lightBrightness} on={lightOn} />
       <Form>
-        <Form.Group controlId="formBasicRange">
+        <Form.Group>
           <Form.Label>Brightness</Form.Label>
           <Form.Control
             type="range"
