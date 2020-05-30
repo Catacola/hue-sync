@@ -80,8 +80,16 @@ function Controller(props: {
         ws.current = new WebSocket(ws_address);
         if(enabled) {
           ws.current.onmessage = handleMessage;
+          ws.current.onopen = () => {
+            const blob = JSON.stringify({
+              message: "sendmessage",
+              data: JSON.stringify({type: 'newClient'}),
+            });
+            ws.current && ws.current.send(blob);
+          };
         }
         console.log('New Websocket!');
+
       }
     }, 2000);
 
