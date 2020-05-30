@@ -18,8 +18,9 @@ function Controller(props: {
   const [lightBrightness, setLightBrightness] = useState<number>(0);
   const [lightOn, setLightOn] = useState<boolean>(true);
   const [numLights, setNumLights] = useState<number>(0);
+  const [enabled, setEnabled] = useState<boolean>(true);
+  const [globalBrightness, setGlobalBrightness] = useState<number>(100);
   const setPatternInterval = useInterval(null);
-  const [enabled, setEnabled] = useState(true);
   const {address, username} = props;
 
   const ws = useRef<?WebSocket>();
@@ -118,12 +119,24 @@ function Controller(props: {
     setEnabled(!enabled);
   };
 
+  const handleBrightnessChange = (event: SyntheticInputEvent<Form.Control>) => {
+    setGlobalBrightness(parseInt(event.target.value));
+  };
+
   return (
     <div className="Controller">
       <div>Good to go!</div>
       <div>Connected to {numLights} light{numLights !== 1 && 's'}</div>
       <FakeLight hue={lightHue} brightness={lightBrightness} on={lightOn} />
       <Form>
+        <Form.Group controlId="formBasicRange">
+          <Form.Label>Brightness</Form.Label>
+          <Form.Control
+            type="range"
+            onChange={handleBrightnessChange}
+            value={globalBrightness}
+          />
+        </Form.Group>
         <Form.Switch
           onChange={handleToggleEnabled}
           id="custom-switch"
