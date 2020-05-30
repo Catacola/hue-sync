@@ -11,32 +11,58 @@ import PatternMaker from './PatternMaker.js';
 const ws_address = 'wss://mmyh4hlyp8.execute-api.us-east-1.amazonaws.com/Prod';
 
 function App() {
-  const [ws, setWs] = useState<WebSocket>(new WebSocket(ws_address));
+  const [ws, setWs] = useState<?WebSocket>();
+  const [lastMessage, setLastMessage] = useState<Object>({});
 
   useEffect(() => {
     const id = setInterval(() => {
-      if (ws.readyState === 2 || ws.readyState === 3) {
+      if (ws == null || ws.readyState === 2 || ws.readyState === 3) {
         setWs(new WebSocket(ws_address));
       }
     }, 2000);
 
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      ws && ws.close();
+    };
   }, [ws]);
 
-  const handleColorClick = (hue) => {
-    const msg = JSON.stringify({
+  useEffect(() => {
+    if (ws != null) {
+      ws.onmessage = (event: any) => {
+        const data = JSON.parse(event['data']);
+
+        if (data.type === 'newClient') {
+          const blob = JSON.stringify({
+            message: "sendmessage",
+            data: JSON.stringify(lastMessage),
+          });
+          ws.send(blob);
+        }
+      };
+    }
+  }, [lastMessage, ws]);
+
+
+  const sendMessage = (msg: {type: string, args: Object}) => {
+    const blob = JSON.stringify({
       message: "sendmessage",
-      data: JSON.stringify({
-        type: "light",
-        args: {
-          on: true,
-          hue: hue*182,
-          bri: 255,
-          transitiontime: 2,
-        },
-      })
+      data: JSON.stringify(msg),
     });
-    ws.send(msg);
+    setLastMessage(msg);
+    ws && ws.send(blob);
+  }
+
+  const handleColorClick = (hue) => {
+    sendMessage({
+      type: "light",
+      args: {
+        on: true,
+        hue: hue*182,
+        bri: 255,
+        transitiontime: 2,
+      },
+    });
   };
 
   const handleSendPattern = (
@@ -44,19 +70,15 @@ function App() {
     interval: number,
     transitiontime: number,
   ) => {
-    const msg = JSON.stringify({
-      message: "sendmessage",
-      data: JSON.stringify({
-        type: "pattern",
-        args: {
-          pattern: "step",
-          colors: hues.map(h => h*182),
-          interval,
-          transitiontime,
-        },
-      })
+    sendMessage({
+      type: "pattern",
+      args: {
+        pattern: "step",
+        colors: hues.map(h => h*182),
+        interval,
+        transitiontime,
+      },
     });
-    ws.send(msg);
   }
 
   return (
