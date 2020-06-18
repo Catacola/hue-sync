@@ -12,18 +12,17 @@ function Linker(props: {
   setIsLinked: (boolean) => void,
 }) {
   const [error, setError] = useState<string>('');
-  const {address, setUsername, setIsLinked} = props;
-
+  const { address, setUsername, setIsLinked } = props;
 
   const linkBridge = async () => {
     const resp = await Hue.link(address);
 
-    if(resp === 'NO_RESPONSE') {
+    if (resp === 'NO_RESPONSE') {
       setError('Bridge not responding');
       return;
     }
 
-    if(resp === 'PRESS_LINK') {
+    if (resp === 'PRESS_LINK') {
       setError('Link button not pressed');
       return;
     }
@@ -35,13 +34,14 @@ function Linker(props: {
 
   return (
     <>
-      {
-        error === ''
-          ? <Alert variant={'secondary'}>
-              Press the link button on your Hue bridge and then click below within 30 seconds
-            </Alert>
-          : <Alert variant={'danger'}>{error}</Alert>
-      }
+      {error === '' ? (
+        <Alert variant="secondary">
+          Press the link button on your Hue bridge and then click below within
+          30 seconds
+        </Alert>
+      ) : (
+        <Alert variant="danger">{error}</Alert>
+      )}
 
       <Button onClick={linkBridge}>Link to Bridge</Button>
     </>

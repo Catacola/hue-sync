@@ -14,20 +14,20 @@ function Setup(props: {
   setAddress: (string) => void,
   setUsername: (string) => void,
 }) {
-  const {setIsLinked, address, setAddress, setUsername} = props;
+  const { setIsLinked, address, setAddress, setUsername } = props;
 
   return (
     <div className="Setup">
       <h3>Setup Bridge</h3>
-      {
-        address === ''
-          ? <Finder setAddress={setAddress}/>
-          : <Linker
-              address={address}
-              setUsername={setUsername}
-              setIsLinked={setIsLinked}
-            />
-      }
+      {address === '' ? (
+        <Finder setAddress={setAddress} />
+      ) : (
+        <Linker
+          address={address}
+          setUsername={setUsername}
+          setIsLinked={setIsLinked}
+        />
+      )}
     </div>
   );
 }

@@ -9,5 +9,4 @@ export function useInterval(intId: ?IntervalID = null) {
     id !== null && clearInterval(id);
     setId(newId);
   };
-
 }
