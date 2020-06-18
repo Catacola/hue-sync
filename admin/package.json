@@ -35,5 +35,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "jsxSingleQuote": false,
+    "overrides": [
+      {
+        "files": "*.js",
+        "options": {
+          "parser": "flow"
+        }
+      }
+    ]
   }
 }

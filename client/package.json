@@ -40,5 +40,18 @@
   },
   "devDependencies": {
     "flow-bin": "^0.125.1"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "jsxSingleQuote": false,
+    "overrides": [
+      {
+        "files": "*.js",
+        "options": {
+          "parser": "flow"
+        }
+      }
+    ]
   }
 }
