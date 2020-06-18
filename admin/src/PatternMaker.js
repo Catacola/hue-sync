@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import ColorPicker  from './ColorPicker.js';
-import ColorItem, { EmptyColorItem }  from './ColorItem.js';
+import ColorPicker from './ColorPicker.js';
+import ColorItem, { EmptyColorItem } from './ColorItem.js';
 import './PatternMaker.css';
 
 function PatternMaker(props: {
@@ -20,18 +20,12 @@ function PatternMaker(props: {
     const pattern = [];
     for (let i = 0; i < 6; i++) {
       if (i < curPattern.length) {
-        pattern.push(
-          <ColorItem hue={curPattern[i]} key={i} />
-        );
+        pattern.push(<ColorItem hue={curPattern[i]} key={i} />);
       } else {
-        pattern.push(<EmptyColorItem key={i}/>);
+        pattern.push(<EmptyColorItem key={i} />);
       }
     }
-    return (
-      <div className="NewPattern">
-        {pattern}
-      </div>
-    );
+    return <div className="NewPattern">{pattern}</div>;
   };
 
   const handleClear = () => setCurPattern([]);
@@ -40,9 +34,9 @@ function PatternMaker(props: {
     await props.handleSendPattern(
       curPattern,
       Math.floor(patternInterval * 1000),
-      Math.floor(fadetime * 10),
+      Math.floor(fadetime * 10)
     );
-  }
+  };
 
   const handleIntervalChange = (event) => {
     if (event.target.value.length === 0) {
@@ -50,7 +44,7 @@ function PatternMaker(props: {
     } else {
       setPatternInterval(event.target.value);
     }
-  }
+  };
 
   const handleFadeChange = (event) => {
     if (event.target.value.length === 0) {
@@ -58,21 +52,20 @@ function PatternMaker(props: {
     } else {
       setFadetime(event.target.value);
     }
-  }
+  };
 
   const isIntervalValid = () => patternInterval >= 0.3;
 
   const isFadeValid = () => fadetime >= 0.1;
 
-  const canSubmit = () => curPattern.length > 1 && isIntervalValid() && isFadeValid();
+  const canSubmit = () =>
+    curPattern.length > 1 && isIntervalValid() && isFadeValid();
 
   const renderControls = () => {
     return (
       <div className="NewPatternControls">
         <div className="row">
-          <Button onClick={handleClear} >
-            Clear Pattern
-          </Button>
+          <Button onClick={handleClear}>Clear Pattern</Button>
           <Button onClick={handleSend} disabled={!canSubmit()}>
             Send Pattern
           </Button>
@@ -119,12 +112,11 @@ function PatternMaker(props: {
     }
   };
 
-
   return (
     <div className="PatternMaker">
       {renderPattern()}
       {renderControls()}
-      <hr className="hrFade"/>
+      <hr className="hrFade" />
       <ColorPicker handleColorClick={handleColorClick} />
     </div>
   );

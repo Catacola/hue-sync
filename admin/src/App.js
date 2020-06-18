@@ -34,7 +34,7 @@ function App() {
 
         if (data.type === 'newClient') {
           const blob = JSON.stringify({
-            message: "sendmessage",
+            message: 'sendmessage',
             data: JSON.stringify(lastMessage),
           });
           ws.send(blob);
@@ -43,22 +43,21 @@ function App() {
     }
   }, [lastMessage, ws]);
 
-
-  const sendMessage = (msg: {type: string, args: Object}) => {
+  const sendMessage = (msg: { type: string, args: Object }) => {
     const blob = JSON.stringify({
-      message: "sendmessage",
+      message: 'sendmessage',
       data: JSON.stringify(msg),
     });
     setLastMessage(msg);
     ws && ws.send(blob);
-  }
+  };
 
   const handleColorClick = (hue) => {
     sendMessage({
-      type: "light",
+      type: 'light',
       args: {
         on: true,
-        hue: hue*182,
+        hue: hue * 182,
         bri: 255,
         transitiontime: 2,
       },
@@ -68,18 +67,18 @@ function App() {
   const handleSendPattern = (
     hues: number[],
     interval: number,
-    transitiontime: number,
+    transitiontime: number
   ) => {
     sendMessage({
-      type: "pattern",
+      type: 'pattern',
       args: {
-        pattern: "step",
-        colors: hues.map(h => h*182),
+        pattern: 'step',
+        colors: hues.map((h) => h * 182),
         interval,
         transitiontime,
       },
     });
-  }
+  };
 
   return (
     <div className="App">

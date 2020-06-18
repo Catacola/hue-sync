@@ -8,13 +8,13 @@ function ColorItem(props: {
   hue: number,
   handleClick?: (number) => ?Promise<void>,
 }) {
-  const {hue, handleClick} = props;
+  const { hue, handleClick } = props;
 
   let style;
   if (handleClick) {
-    style = {backgroundColor: `hsl(${hue}, 100%, 50%)`, cursor: 'pointer'};
+    style = { backgroundColor: `hsl(${hue}, 100%, 50%)`, cursor: 'pointer' };
   } else {
-    style = {backgroundColor: `hsl(${hue}, 100%, 50%)`};
+    style = { backgroundColor: `hsl(${hue}, 100%, 50%)` };
   }
 
   return (
@@ -28,9 +28,7 @@ function ColorItem(props: {
 }
 
 export function EmptyColorItem() {
-  return (
-    <div className="ColorItem empty" />
-  );
+  return <div className="ColorItem empty" />;
 }
 
 export default ColorItem;
