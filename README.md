@@ -1,5 +1,5 @@
 # hue-sync
-Sync hue lights in multiple locations from a single controller
+Sync Philips hue lights in multiple locations across the web. Users open a webpage, link to their philips bridge, and then cede control. The admin page can select single colors or send simple patterns to all clients currently connected.
 
 # Overview
 
